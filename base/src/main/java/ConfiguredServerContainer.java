@@ -5,6 +5,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,6 +35,19 @@ public class ConfiguredServerContainer extends NginxContainer<ConfiguredServerCo
     @SuppressWarnings("resource")
     private void rename() {
         withCreateContainerCmdModifier(m -> m.withName("serverContainer-" + UUID.randomUUID()));
+    }
+
+    public void startAndCopyConfigs() {
+        start();
+        copyConfigs();
+    }
+
+    public String cert() {
+        return new String(readFromJar("cert.pem"), StandardCharsets.UTF_8);
+    }
+
+    public String certKey() {
+        return new String(readFromJar("cert-key.pem"), StandardCharsets.UTF_8);
     }
 
     @SneakyThrows
