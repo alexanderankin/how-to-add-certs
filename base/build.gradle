@@ -5,6 +5,8 @@ plugins {
 
 sourceSets { create('certGeneration') }
 configurations {
+    testCompileOnly.extendsFrom(compileOnly)
+    testAnnotationProcessor.extendsFrom(annotationProcessor)
     certGenerationImplementation.extendsFrom(implementation)
     certGenerationCompileOnly.extendsFrom(compileOnly)
     certGenerationAnnotationProcessor.extendsFrom(annotationProcessor)
@@ -12,7 +14,13 @@ configurations {
 
 dependencies {
     api 'ch.qos.logback:logback-classic:1.2.11'
-    api 'org.testcontainers:testcontainers:1.17.2'
+    api platform('org.testcontainers:testcontainers-bom:1.17.2')
+    api 'org.testcontainers:testcontainers'
+    api 'org.testcontainers:nginx'
+
+    api 'org.springframework:spring-web:5.3.21'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
 
     certGenerationImplementation 'org.apache.commons:commons-lang3:3.12.0'
 }

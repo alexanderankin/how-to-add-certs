@@ -60,7 +60,7 @@ public class Main {
                     "-days",
                     "365",
                     "-subj",
-                    "/C=US/ST=Oregon/L=Portland/O=Company Name/OU=Org/CN=example.local");
+                    "/C=US/ST=Oregon/L=Portland/O=Company Name/OU=Org/CN=localhost");
             Assert.assertEquals("openssl added", 0, opensslResult.getExitCode());
 
             copyFile(outputDirectory, certFileName, c.execInContainer("cat", certFileName));
