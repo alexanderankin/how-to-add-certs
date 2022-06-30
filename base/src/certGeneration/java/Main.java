@@ -48,8 +48,6 @@ public class Main {
 
             Container.ExecResult opensslResult = c.execInContainer("openssl",
                     "req",
-                    "-addext",
-                    "basicConstraints=CA:TRUE",
                     "-x509",
                     "-nodes",
                     "-newkey",
