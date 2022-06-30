@@ -1,0 +1,3 @@
+rootProject.name = 'how-to-add-certs'
+include 'base'
+include 'ubuntu'
