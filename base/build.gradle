@@ -1,3 +1,42 @@
 plugins {
-    id 'java'
+    id 'java-conventions'
+    id 'java-library'
 }
+
+sourceSets { create('certGeneration') }
+configurations {
+    certGenerationImplementation.extendsFrom(implementation)
+    certGenerationCompileOnly.extendsFrom(compileOnly)
+    certGenerationAnnotationProcessor.extendsFrom(annotationProcessor)
+}
+
+dependencies {
+    api 'ch.qos.logback:logback-classic:1.2.11'
+    api 'org.testcontainers:testcontainers:1.17.2'
+
+    certGenerationImplementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+
+// certs into resources jar
+def certsOutputDir = project.buildDir.toPath()
+        .resolve('generated')
+        .resolve('certs')
+        .resolve('genCerts')
+        .toAbsolutePath()
+        .toString()
+sourceSets.maybeCreate('main').resources.srcDir(certsOutputDir)
+
+/**
+ * this task will run the openssl command in a docker container
+ * and then place them into the main sourceSet's resources
+ */
+def genCerts = tasks.register('genCerts', JavaExec) {
+    it.group 'build'
+    it.description 'generate certs and add to resources'
+    it.classpath(sourceSets.certGeneration.runtimeClasspath)
+    it.mainClass.set 'Main'
+    it.args('', '', certsOutputDir)
+
+    it.outputs.dir(certsOutputDir)
+}
+tasks.named('processResources') { it.dependsOn genCerts }
